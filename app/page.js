@@ -1,9 +1,7 @@
-import Layout from "@/app/ui/components/Layout";
+import Beranda from "./ui/customer/Beranda";
 
 export default function Home() {
   return (
-    <Layout>
-      <h1>Toko Kelontong</h1>
-    </Layout>
+    <Beranda />
   );
 }
