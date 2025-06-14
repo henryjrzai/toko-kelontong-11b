@@ -20,5 +20,20 @@ export async function getProducts() {
     } catch (error) {
         console.log(error);
     };
+}
+
+export async function addProduct(req) {
+    try {
+        const { id, product, category, stock, price, imageUrl } = req.body;
     
+        const insert = await sql`
+            INSERT INTO products (id, name, price, stock, image, "categoryId")
+            VALUES (${id}, ${product}, ${price}, ${stock}, ${imageUrl}, ${category})
+        `;
+
+        return insert.count > 0;
+    } catch (error) {
+        console.error('Database error:', error);
+        return false;
+    }
 }

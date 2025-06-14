@@ -27,3 +27,15 @@ export const katalogProduct = [
     "nama": "Alat Tulis"
   }, 
 ]
+
+export async function getCategories() {
+  try {
+    const categories = await sql`
+      SELECT *
+      FROM categories 
+    `;
+    return categories;
+  } catch (error) { 
+      console.log(error);
+  };
+}
