@@ -8,9 +8,10 @@ import { ProductsSkeletonLoader } from "@/app/ui/components/ProductSkeleton"
 
 export default function Products(props) {
     const { product } = props;
+    const products = product || [];
     const router = useRouter();
     const [user, setUser] = useState(null);
-    const [products, setProducts] = useState([]);
+    // const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -31,21 +32,21 @@ export default function Products(props) {
         };
         checkAuth();
 
-        const fetchProducts = async () => {
-            try {
-                const response = await product;
+        // const fetchProducts = async () => {
+        //     try {
+        //         const response = await product;
 
-                // Tambahkan delay kecil untuk menghindari glitch visual
-                setTimeout(() => {
-                    setProducts(response || []);
-                    setLoading(false);
-                }, 300);
-            } catch (error) {
-                console.error("Gagal mengambil data produk:", error);
-                setLoading(false);
-            }
-        };
-        fetchProducts();
+        //         // Tambahkan delay kecil untuk menghindari glitch visual
+        //         setTimeout(() => {
+        //             setProducts(response || []);
+        //             setLoading(false);
+        //         }, 300);
+        //     } catch (error) {
+        //         console.error("Gagal mengambil data produk:", error);
+        //         setLoading(false);
+        //     }
+        // };
+        // fetchProducts();
     }, [router]);
 
     return (
