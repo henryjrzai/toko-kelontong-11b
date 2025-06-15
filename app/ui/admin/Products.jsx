@@ -32,27 +32,27 @@ export default function Products(props) {
         };
         checkAuth();
 
-        // const fetchProducts = async () => {
-        //     try {
-        //         const response = await fetch('/api/product', {
-        //             method: 'GET',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //             },
-        //         });
-
-        //         // Tambahkan delay kecil untuk menghindari glitch visual
-        //         setTimeout(() => {
-        //             setProducts(response.data || []);
-        //             setLoading(false);
-        //         }, 300);
-        //     } catch (error) {
-        //         console.error("Gagal mengambil data produk:", error);
-        //         setLoading(false);
-        //     }
-        // };
-        // fetchProducts();
     }, [router]);
+
+    const handleToDelete = async (id) => {
+        if (confirm("Apakah Anda yakin ingin menghapus produk ini?")) {
+            try {
+                const response = await fetch("/api/product?id=" + id, {
+                    method: 'DELETE',
+                });
+
+                if (response.status === 200) {
+                    alert("Produk berhasil dihapus");
+                    router.refresh();
+                } else {
+                    alert("Gagal menghapus produk : ", response.message);
+                }
+            } catch (error) {
+                console.error("Error deleting product:", error);
+                alert("Terjadi kesalahan saat menghapus produk");
+            }
+        }
+    }
 
     return (
         <div className="bg-gray-50 min-h-screen">

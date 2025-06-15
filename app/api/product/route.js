@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
-import { addProduct, getProducts } from '@/app/lib/data/product';
+import { addProduct, getProducts, deleteProduct } from '@/app/lib/data/product';
 
 export async function POST(req) {
     try {
@@ -80,6 +80,38 @@ export async function GET() {
         console.error('Error fetching products:', error);
         return NextResponse.json({
             message: 'Gagal mengambil data produk',
+        }, { status: 500 });
+    }
+}
+
+export async function DELETE(req) {
+    try {
+        const url = new URL(req.url).searchParams;
+        const id = String(url.get("id"));
+        
+        if (!id) {
+            return NextResponse.json({
+                message: 'id produk tidak valid',
+            }, { status: 400 });
+        }
+
+        const response = await deleteProduct(id);
+
+        if (response) {
+            return NextResponse.json({
+                status: 200,
+                message: 'Produk berhasil dihapus',
+            }, { status: 200 });
+        } else {
+            return NextResponse.json({
+                status: 500,
+                message: 'Gagal menghapus produk',
+            }, { status: 500 });
+        }
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        return NextResponse.json({
+            message: 'Gagal menghapus produk',
         }, { status: 500 });
     }
 }

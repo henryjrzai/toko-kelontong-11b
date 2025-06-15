@@ -39,3 +39,13 @@ export async function addProduct(req) {
         return false;
     }
 }
+
+export async function deleteProduct(id) {
+    try {
+        const del = await sql`DELETE FROM products WHERE id = ${id}`;
+        return del.count > 0;
+    } catch (error) {
+        console.error('Database error:', error);
+        return false;
+    }
+}
