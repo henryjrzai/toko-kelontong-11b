@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
-import path from "path";
+import { put } from '@vercel/blob';
 import { addProduct } from '@/app/lib/data/product';
 
 export async function POST(req) {
@@ -19,7 +18,7 @@ export async function POST(req) {
             }, { status: 400 });
         }
         
-        if (!imageFile || imageFile.size === 0) {
+        if (!imageFile) {
             return NextResponse.json({
                 message: 'File gambar harus diupload',
             }, { status: 400 });
@@ -28,22 +27,14 @@ export async function POST(req) {
         const bytes = await imageFile.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
-        // Generate unique filename
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        const fileExtension = path.extname(imageFile.name);
-        const filename = uniqueSuffix + fileExtension;
-
-        // Create upload directory if not exists
-        const uploadDir = path.join(process.cwd(), "public/images");
-        const fs = require('fs');
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-
-        // Save file
-        const filepath = path.join(uploadDir, filename);
-        await writeFile(filepath, buffer);
-
+        const timestamp = Date.now();
+        const filename = `${timestamp}-${imageFile.name}`;
+        
+        // Upload to Vercel Blob
+        const blob = await put(filename, imageFile, {
+            access: 'public',
+        });
+        
        // Prepare data for database
         const productData = {
             body: {
@@ -52,7 +43,7 @@ export async function POST(req) {
                 category,
                 stock: parseInt(stock),
                 price: parseFloat(price),
-                imageUrl: `images/${filename}`
+                imageUrl: blob.url
             }
         };
 
@@ -63,14 +54,7 @@ export async function POST(req) {
             return NextResponse.json({
                 status: 201,
                 message: 'Produk berhasil ditambahkan',
-                data: {
-                    id,
-                    product,
-                    category,
-                    stock,
-                    price,
-                    imageUrl: `images/${filename}`
-                }
+                data: productData
             }, { status: 201 });
         } else {
             return NextResponse.json({
