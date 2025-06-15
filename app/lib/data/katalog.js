@@ -1,4 +1,5 @@
 import postgres from 'postgres';
+import { unstable_noStore as noStore } from 'next/cache';
 const sql = postgres(process.env.POSTGRES_URL, { ssl : "require" })
 
 export const katalogProduct = [
@@ -29,6 +30,7 @@ export const katalogProduct = [
 ]
 
 export async function getCategories() {
+  noStore(); 
   try {
     const categories = await sql`
       SELECT *

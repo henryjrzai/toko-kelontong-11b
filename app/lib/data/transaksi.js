@@ -1,7 +1,9 @@
 import postgres from 'postgres';
+import { unstable_noStore as noStore } from 'next/cache';
 const sql = postgres(process.env.POSTGRES_URL, { ssl : "require" })
 
 export async function getTransactions() {
+    noStore(); 
     try {
         const transactions = await sql`
             SELECT 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
-import { addProduct } from '@/app/lib/data/product';
+import { addProduct, getProducts } from '@/app/lib/data/product';
 
 export async function POST(req) {
     try {
@@ -66,4 +66,20 @@ export async function POST(req) {
         console.log(error);
     };
     
+}
+
+export async function GET() {
+    try {
+        const products = await getProducts();
+        return NextResponse.json({
+            status: 200,
+            message: 'Berhasil mengambil data produk',
+            data: products
+        }, { status: 200 });
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        return NextResponse.json({
+            message: 'Gagal mengambil data produk',
+        }, { status: 500 });
+    }
 }

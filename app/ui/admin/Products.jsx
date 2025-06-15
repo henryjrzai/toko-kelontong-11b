@@ -34,11 +34,16 @@ export default function Products(props) {
 
         // const fetchProducts = async () => {
         //     try {
-        //         const response = await product;
+        //         const response = await fetch('/api/product', {
+        //             method: 'GET',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //         });
 
         //         // Tambahkan delay kecil untuk menghindari glitch visual
         //         setTimeout(() => {
-        //             setProducts(response || []);
+        //             setProducts(response.data || []);
         //             setLoading(false);
         //         }, 300);
         //     } catch (error) {
