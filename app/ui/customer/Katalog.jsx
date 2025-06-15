@@ -94,7 +94,7 @@ const Katalog = (props) => {
               <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <div className="h-48 overflow-hidden">
                   <img 
-                    src={`/${product.image}`} 
+                    src={`${product.image}`} 
                     alt={product.product} 
                     className="w-full h-full object-cover"
                   />
